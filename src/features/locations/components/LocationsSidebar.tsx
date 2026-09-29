@@ -1,9 +1,14 @@
-import { Button, Input, Select, Space } from 'antd';
+import { useState } from 'react';
+import { Button, Input, Select, Space, Typography } from 'antd';
 import type { SelectProps } from 'antd';
 
 import type { LocationFilters } from '../context/LocationsContext';
 import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
 import { useGetLocationsQuery } from '../api/locationsApi';
+
+type SearchType = 'name' | 'address';
+
+const { Text } = Typography;
 
 type LocationsSidebarProps = {
   setFilters: (filters: Partial<LocationFilters>) => void;
@@ -14,6 +19,9 @@ const LocationsSidebar = ({
   setFilters,
   resetFilters
 }: LocationsSidebarProps) => {
+  const [searchType, setSearchType] = useState<SearchType>('name');
+  const [search, setSearch] = useState('');
+
   const { data: organizationsData, isLoading: isOrganizationsLoading } =
     useGetOrganizationsQuery({
       page: 1,
@@ -47,6 +55,26 @@ const LocationsSidebar = ({
     })
   );
 
+  const handleSearchTypeChange = (value: SearchType) => {
+    setSearchType(value);
+    setSearch('');
+
+    setFilters({
+      name: undefined,
+      address: undefined
+    });
+  };
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+
+    setFilters({
+      name: searchType === 'name' ? value || undefined : undefined,
+
+      address: searchType === 'address' ? value || undefined : undefined
+    });
+  };
+
   return (
     <aside
       style={{
@@ -56,25 +84,43 @@ const LocationsSidebar = ({
       }}
     >
       <Space direction='vertical' size='middle' style={{ width: '100%' }}>
-        <Input.Search
-          placeholder='Пошук за назвою'
-          allowClear
-          onSearch={(value) => {
-            setFilters({
-              name: value || undefined
-            });
-          }}
-        />
+        <div>
+          <Text strong>Пошук</Text>
 
-        <Input.Search
-          placeholder='Пошук за адресою'
-          allowClear
-          onSearch={(value) => {
-            setFilters({
-              address: value || undefined
-            });
-          }}
-        />
+          <Space
+            direction='vertical'
+            style={{
+              width: '100%',
+              marginTop: 8
+            }}
+          >
+            <Select<SearchType>
+              value={searchType}
+              style={{ width: '100%' }}
+              onChange={handleSearchTypeChange}
+              options={[
+                {
+                  label: 'Пошук за назвою',
+                  value: 'name'
+                },
+                {
+                  label: 'Пошук за адресою',
+                  value: 'address'
+                }
+              ]}
+            />
+
+            <Input.Search
+              value={search}
+              allowClear
+              placeholder={searchType === 'name' ? 'Назва' : 'Адреса'}
+              onChange={(event) => {
+                setSearch(event.target.value);
+              }}
+              onSearch={handleSearch}
+            />
+          </Space>
+        </div>
 
         <Select<string>
           placeholder='Код локації'
