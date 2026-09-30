@@ -79,6 +79,7 @@ const AddPrinterModal = ({ open, onClose }: AddPrinterModalProps) => {
       form.setFieldsValue({
         ipAddress: discovered.ipAddress,
         displayName: discovered.displayName,
+        macAddress: discovered.macAddress,
         model: discovered.model,
         serialNumber: discovered.serialNumber
       });

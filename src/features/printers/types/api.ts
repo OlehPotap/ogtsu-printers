@@ -102,6 +102,7 @@ export type GetPrinterMetricsQueryParams = {
 export type DiscoverPrinterResponse = {
   ipAddress: string;
   displayName: string;
+  macAddress: string;
   model: string;
   serialNumber: string;
   sysObjectId: string;
