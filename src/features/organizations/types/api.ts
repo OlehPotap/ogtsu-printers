@@ -4,7 +4,6 @@ export type Organization = {
   name: string;
 };
 
-// TODO: must be page
 export type GetOrganizationsResponse = {
   items: Organization[];
   total: number;

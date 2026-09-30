@@ -55,10 +55,6 @@ const Sidebar = () => {
     );
   }
 
-  // if (pathname.startsWith('/admin/users')) {
-  //   return <AdminUsersSidebar />;
-  // }
-
   return null;
 };
 
