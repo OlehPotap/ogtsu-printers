@@ -15,6 +15,7 @@ const Sidebar = () => {
   } = useOrganizations();
 
   const {
+    queryParams: LocationFilters,
     setFilters: setLocationsFilters,
     resetFilters: resetLocationsFilters
   } = useLocations();
@@ -47,6 +48,7 @@ const Sidebar = () => {
   if (pathname.startsWith('/admin/locations')) {
     return (
       <LocationsSidebar
+        filters={LocationFilters}
         setFilters={setLocationsFilters}
         resetFilters={resetLocationsFilters}
       />

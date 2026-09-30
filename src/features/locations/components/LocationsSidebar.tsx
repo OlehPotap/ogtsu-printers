@@ -11,11 +11,13 @@ type SearchType = 'name' | 'address';
 const { Text } = Typography;
 
 type LocationsSidebarProps = {
+  filters: LocationFilters;
   setFilters: (filters: Partial<LocationFilters>) => void;
   resetFilters: () => void;
 };
 
 const LocationsSidebar = ({
+  filters,
   setFilters,
   resetFilters
 }: LocationsSidebarProps) => {
@@ -111,7 +113,7 @@ const LocationsSidebar = ({
             />
 
             <Input.Search
-              value={search}
+              value={searchType === 'name' ? filters.name : filters.address}
               allowClear
               placeholder={searchType === 'name' ? 'Назва' : 'Адреса'}
               onChange={(event) => {
@@ -123,6 +125,7 @@ const LocationsSidebar = ({
         </div>
 
         <Select<string>
+          value={filters.ogtsuId}
           placeholder='Код локації'
           allowClear
           showSearch={{
@@ -139,6 +142,7 @@ const LocationsSidebar = ({
         />
 
         <Select<string>
+          value={filters.orgId}
           placeholder='Організація'
           allowClear
           showSearch={{
@@ -154,7 +158,12 @@ const LocationsSidebar = ({
           }}
         />
 
-        <Button onClick={resetFilters} block>
+        <Button
+          onClick={() => {
+            resetFilters();
+          }}
+          block
+        >
           Скинути фільтри
         </Button>
       </Space>
