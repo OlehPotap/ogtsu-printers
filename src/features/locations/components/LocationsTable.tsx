@@ -6,6 +6,7 @@ import AddLocationModal from './AddLocationModal';
 import EditLocationModal from './EditLocationModal';
 
 import type { Location } from '../types/api';
+import type { Organization } from '../../organizations/types/api';
 
 import { useDeleteLocationMutation } from '../api/locationsApi';
 import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
@@ -27,11 +28,6 @@ const LocationsTable = ({ locations, loading }: LocationsTableProps) => {
 
   const [deleteLocation, { isLoading: isDeleting }] =
     useDeleteLocationMutation();
-
-  const { data: organizationsData } = useGetOrganizationsQuery({
-    page: 1,
-    pageSize: 100
-  });
 
   // console.log(organizationsData);
 
@@ -76,14 +72,10 @@ const LocationsTable = ({ locations, loading }: LocationsTableProps) => {
     },
     {
       title: 'Організація',
-      dataIndex: 'orgId',
-      key: 'orgId',
-      render: (orgId: string) => {
-        const organization = organizationsData?.items.find(
-          (organization) => organization.id === orgId
-        );
-
-        return organization?.code ?? '—';
+      dataIndex: 'orgDto',
+      key: 'orgDto',
+      render: (orgDto: Organization) => {
+        return `${orgDto.code} - ${orgDto.name}`;
       }
     },
     {
