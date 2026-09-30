@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import type { TableProps } from 'antd';
 
 import type { Printer } from '../types/api';
+import type { Location } from '../../locations/types/api';
 
 import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
 import { useGetLocationsQuery } from '../../locations/api/locationsApi';
@@ -109,16 +110,19 @@ const PrintersTable = ({
     },
     {
       title: 'Організація',
-      dataIndex: 'orgId',
+      dataIndex: 'location',
       key: 'orgId',
-      render: (orgId: string) => organizationById.get(orgId)?.code ?? '—'
+      render: (location: Location) => {
+        return `${location.orgDto.code} - ${location.orgDto.name}`;
+      }
     },
     {
       title: 'Локація',
-      dataIndex: 'locationId',
-      key: 'locationId',
-      render: (locationId: string) =>
-        locationById.get(locationId)?.ogtsuId ?? '—'
+      dataIndex: 'location',
+      key: 'location',
+      render: (location: Location) => {
+        return `${location.ogtsuId} - ${location.name}`;
+      }
     },
     {
       title: 'Статус',

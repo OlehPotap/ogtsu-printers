@@ -1,11 +1,12 @@
+import type { Location } from '../../locations/types/api';
+
 export type Printer = {
   id: string;
   ipAddress: string;
   model: string;
   displayName: string;
   vendor: string;
-  orgId: string;
-  locationId: string;
+  location: Location;
   lastStatus: string;
 };
 

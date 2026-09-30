@@ -63,8 +63,8 @@ const EditPrinterModal = ({
     form.setFieldsValue({
       displayName: printer.displayName,
       ipAddress: printer.ipAddress,
-      locationId: printer.locationId,
-      orgId: printer.orgId,
+      locationId: printer.location.id,
+      orgId: printer.location.orgDto.id,
       vendor: printer.vendor
     });
   }, [printer, form]);
