@@ -8,8 +8,6 @@ import { openExport } from '../shared/utils/openExport';
 const PrintersPage = () => {
   const { queryParams, setPagination } = usePrinters();
 
-  console.log(queryParams);
-
   const { data, isLoading, isFetching, isError } =
     useGetPrintersQuery(queryParams);
 

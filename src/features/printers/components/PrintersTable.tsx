@@ -11,9 +11,6 @@ import type { TableProps } from 'antd';
 import type { Printer } from '../types/api';
 import type { Location } from '../../locations/types/api';
 
-import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
-import { useGetLocationsQuery } from '../../locations/api/locationsApi';
-
 import { useDeletePrinterMutation } from '../api/printersApi';
 import EditPrinterModal from '../components/EditPrinterModal';
 
@@ -41,27 +38,6 @@ const PrintersTable = ({
   const [editingPrinter, setEditingPrinter] = useState<Printer | null>(null);
 
   const [deletePrinter, { isLoading: isDeleting }] = useDeletePrinterMutation();
-
-  const { data: organizationsData } = useGetOrganizationsQuery({
-    page: 1,
-    pageSize: 100
-  });
-
-  const { data: locationsData } = useGetLocationsQuery({
-    page: 1,
-    pageSize: 100
-  });
-
-  const organizationById = new Map(
-    organizationsData?.items.map((organization) => [
-      organization.id,
-      organization
-    ]) ?? []
-  );
-
-  const locationById = new Map(
-    locationsData?.items.map((location) => [location.id, location]) ?? []
-  );
 
   const handleDelete = (printer: Printer) => {
     Modal.confirm({

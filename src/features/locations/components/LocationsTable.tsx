@@ -9,7 +9,6 @@ import type { Location } from '../types/api';
 import type { Organization } from '../../organizations/types/api';
 
 import { useDeleteLocationMutation } from '../api/locationsApi';
-import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
 
 type LocationsTableProps = {
   locations: Location[];
@@ -28,8 +27,6 @@ const LocationsTable = ({ locations, loading }: LocationsTableProps) => {
 
   const [deleteLocation, { isLoading: isDeleting }] =
     useDeleteLocationMutation();
-
-  // console.log(organizationsData);
 
   const handleDelete = (location: Location) => {
     Modal.confirm({
