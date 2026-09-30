@@ -22,7 +22,6 @@ const LocationsSidebar = ({
   resetFilters
 }: LocationsSidebarProps) => {
   const [searchType, setSearchType] = useState<SearchType>('name');
-  const [search, setSearch] = useState('');
 
   const { data: organizationsData, isLoading: isOrganizationsLoading } =
     useGetOrganizationsQuery({
@@ -59,7 +58,6 @@ const LocationsSidebar = ({
 
   const handleSearchTypeChange = (value: SearchType) => {
     setSearchType(value);
-    setSearch('');
 
     setFilters({
       name: undefined,
@@ -68,8 +66,6 @@ const LocationsSidebar = ({
   };
 
   const handleSearch = (value: string) => {
-    setSearch(value);
-
     setFilters({
       name: searchType === 'name' ? value || undefined : undefined,
 
@@ -117,7 +113,9 @@ const LocationsSidebar = ({
               allowClear
               placeholder={searchType === 'name' ? 'Назва' : 'Адреса'}
               onChange={(event) => {
-                setSearch(event.target.value);
+                setFilters({
+                  name: event.target.value
+                });
               }}
               onSearch={handleSearch}
             />
