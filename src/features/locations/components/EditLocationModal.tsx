@@ -6,6 +6,7 @@ import { useUpdateLocationMutation } from '../api/locationsApi';
 import { useGetOrganizationsQuery } from '../../organizations/api/organizationsApi';
 
 import type { Location } from '../types/api';
+import type { Organization } from '../../organizations/types/api';
 
 type EditLocationModalProps = {
   location: Location | null;
@@ -17,7 +18,7 @@ type FormValues = {
   address: string;
   name: string;
   ogtsuId: string;
-  orgId: string;
+  orgDto: Organization;
 };
 
 const EditLocationModal = ({
@@ -47,7 +48,7 @@ const EditLocationModal = ({
         address: location.address,
         name: location.name,
         ogtsuId: location.ogtsuId,
-        orgId: location.orgId
+        orgDto: location.orgDto
       });
     }
   }, [location, form]);

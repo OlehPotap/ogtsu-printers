@@ -12,7 +12,6 @@ type LocationsContextValue = {
 
   setFilters: (filters: Partial<LocationFilters>) => void;
   setPagination: (page: number, pageSize: number) => void;
-  // TODO: reset filters does not work prpltly
   resetFilters: () => void;
 };
 

@@ -1,10 +1,11 @@
+import { Organization } from '../../organizations/types/api';
+
 export type Location = {
   id: string;
-  code: string;
   name: string;
   address: string;
   ogtsuId: string;
-  orgId: string;
+  orgDto: Organization;
 };
 
 export type GetLocationsResponse = {
