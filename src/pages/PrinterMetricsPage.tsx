@@ -1,80 +1,16 @@
-import { Card, Empty, Flex, Progress, Skeleton, Space, Typography } from 'antd';
+import { Empty } from 'antd';
 import { useParams } from 'react-router-dom';
 
-import { useGetPrinterMetricsQuery } from '../features/printers/api/printersApi';
-
-const { Text, Title } = Typography;
+import PrinterMetrics from '../features/printers/components/metrics/PrintersMetrics';
 
 const PrinterMetricsPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading, isFetching, isError } = useGetPrinterMetricsQuery(
-    {
-      id: id ?? '',
-      params: {
-        limit: 50
-      }
-    },
-    {
-      skip: !id
-    }
-  );
-
-  if (isLoading || isFetching) {
-    return <Skeleton active />;
+  if (!id) {
+    return <Empty description='Принтер не знайдено' />;
   }
 
-  if (isError) {
-    return <Empty description='Не вдалося завантажити метрики' />;
-  }
-
-  if (!data?.items.length) {
-    return <Empty description='Метрики відсутні' />;
-  }
-
-  const latestMetric = data.items[0];
-
-  return (
-    <Flex vertical gap={24} style={{ padding: 24 }}>
-      <Title level={2}>Метрики принтера</Title>
-
-      <Space size='large' wrap>
-        <Card title='Статус'>{latestMetric.status}</Card>
-
-        <Card title='Всього відбитків'>
-          {latestMetric.totalImpressions ?? '—'}
-        </Card>
-
-        <Card title='Ч/Б відбитків'>{latestMetric.monoImpressions ?? '—'}</Card>
-
-        <Card title='Кольорових відбитків'>
-          {latestMetric.colorImpressions ?? '—'}
-        </Card>
-      </Space>
-
-      <Card title='Витратні матеріали'>
-        <Flex vertical gap={16}>
-          {latestMetric.supplies.map((supply, index) => (
-            <Flex
-              key={`${supply.type}-${supply.color}-${index}`}
-              align='center'
-              gap={16}
-            >
-              <Text style={{ width: 300 }}>{supply.description}</Text>
-
-              <Progress
-                percent={supply.levelPercent ?? 0}
-                style={{
-                  maxWidth: 500,
-                  flex: 1
-                }}
-              />
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
-    </Flex>
-  );
+  return <PrinterMetrics printerId={id} />;
 };
 
 export default PrinterMetricsPage;

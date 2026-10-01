@@ -1,9 +1,12 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, matchPath } from 'react-router-dom';
 
 import { routes } from '../../app/routes/routes';
+
 import PrintersSidebar from '../../features/printers/components/PrintersSidebar';
 import OrganizationsSidebar from '../../features/organizations/components/OrganizationsSidebar';
 import LocationsSidebar from '../../features/locations/components/LocationsSidebar';
+import PrinterMetricsSidebar from '../../features/printers/components/metrics/PrintersMetricsSidebar';
+
 import { usePrinters } from '../../features/printers/hooks/usePrinters';
 import { useOrganizations } from '../../features/organizations/hooks/useOrganizations';
 import { useLocations } from '../../features/locations/hooks/useLocations';
@@ -24,7 +27,19 @@ const Sidebar = () => {
   const { setFilters: setPrintersFilters, resetFilters: resetPrintersFilters } =
     usePrinters();
 
-  if (pathname.startsWith(routes.printers)) {
+  if (
+    matchPath(
+      {
+        path: '/printers/:id/metrics',
+        end: true
+      },
+      pathname
+    )
+  ) {
+    return <PrinterMetricsSidebar />;
+  }
+
+  if (pathname.startsWith('/printers')) {
     return (
       <PrintersSidebar
         setFilters={setPrintersFilters}

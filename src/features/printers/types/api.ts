@@ -63,6 +63,22 @@ export type UpdatePrinterRequestBody = {
   vendor?: string;
 };
 
+export type PrinterImpressions = {
+  total: number;
+  mono: number;
+  color: number;
+  monoA4Equivalent: number;
+  colorA4Equivalent: number;
+  byMediaSize: [
+    {
+      code: number;
+      mediaSize: string;
+      impressions: number;
+      unitFactor: number;
+    }
+  ];
+};
+
 export type PrinterSupply = {
   type: number;
   color: number;
@@ -82,6 +98,7 @@ export type PrinterMetric = {
   monoImpressions: number | null;
   colorImpressions: number | null;
   supplies: PrinterSupply[];
+  impressions: PrinterImpressions;
 };
 
 export type GetPrinterMetricsResponse = {
