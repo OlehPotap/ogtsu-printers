@@ -1,9 +1,17 @@
-import { Card, Empty, Flex, Progress, Skeleton, Space, Typography } from 'antd';
+import { Empty, Flex, Skeleton, Typography } from 'antd';
 
 import { useGetPrinterMetricsQuery } from '../../api/printersApi';
 import { usePrinterMetrics } from '../../hooks/usePrinterMetrics';
 
-const { Text, Title } = Typography;
+import MetricsSummary from './MetricsSummary';
+import SuppliesHistoryChart from './SuppliesHistoryChart';
+import ImpressionsHistoryChart from './ImpressionHistoryChart';
+
+import { useMemo } from 'react';
+
+import { preparePrinterMetrics } from '../../utils/preparePrinterMetrics';
+
+const { Title } = Typography;
 
 type PrinterMetricsProps = {
   printerId: string;
@@ -17,6 +25,15 @@ const PrinterMetrics = ({ printerId }: PrinterMetricsProps) => {
     params: queryParams
   });
 
+  const metrics = useMemo(
+    () => preparePrinterMetrics(data?.items ?? []),
+    [data?.items]
+  );
+
+  if (!metrics.length) {
+    return <Empty description='Метрики відсутні' />;
+  }
+
   if (isLoading || isFetching) {
     return <Skeleton active />;
   }
@@ -29,7 +46,7 @@ const PrinterMetrics = ({ printerId }: PrinterMetricsProps) => {
     return <Empty description='Метрики відсутні' />;
   }
 
-  const latestMetric = data.items[0];
+  const latestMetric = metrics[metrics.length - 1];
 
   return (
     <Flex
@@ -42,43 +59,11 @@ const PrinterMetrics = ({ printerId }: PrinterMetricsProps) => {
     >
       <Title level={2}>Метрики принтера</Title>
 
-      <Space size='large' wrap>
-        <Card title='Статус'>{latestMetric.status}</Card>
+      <MetricsSummary metric={latestMetric} />
 
-        <Card title='Всього відбитків'>
-          {latestMetric.impressions.total ?? '—'}
-        </Card>
+      <SuppliesHistoryChart metrics={metrics} />
 
-        <Card title='Ч/Б відбитків'>
-          {latestMetric.impressions.mono ?? '—'}
-        </Card>
-
-        <Card title='Кольорових відбитків'>
-          {latestMetric.impressions.color ?? '—'}
-        </Card>
-      </Space>
-
-      <Card title='Витратні матеріали'>
-        <Flex vertical gap={16}>
-          {latestMetric.supplies.map((supply, index) => (
-            <Flex
-              key={`${supply.type}-${supply.color}-${index}`}
-              align='center'
-              gap={16}
-            >
-              <Text style={{ width: 300 }}>{supply.description}</Text>
-
-              <Progress
-                percent={supply.levelPercent ?? 0}
-                style={{
-                  maxWidth: 500,
-                  flex: 1
-                }}
-              />
-            </Flex>
-          ))}
-        </Flex>
-      </Card>
+      <ImpressionsHistoryChart metrics={metrics} />
     </Flex>
   );
 };
